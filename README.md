@@ -6,7 +6,7 @@
 
 ## 🌐 Live Demo
 
-[View Live Site](https://your-username.github.io/jarurat-care)
+[View Live Site](https://jarurat-care-assignment1.vercel.app)
 
 ---
 
@@ -33,7 +33,7 @@ Jarurat Care is designed for grassroots healthcare NGOs in India. It solves thre
 | Frontend | HTML, CSS, Vanilla JavaScript |
 | AI / Triage | Google Gemini 2.5 Flash API |
 | Database | Supabase (PostgreSQL) |
-| Hosting | GitHub Pages |
+| Hosting | Vercel |
 
 ---
 
@@ -64,7 +64,7 @@ When a patient submits their symptom description, the app sends it to **Gemini 2
 
 ```
 jarurat-care/
-└── index.html    # entire app in one file
+└── index.html   
 ```
 
 ---
