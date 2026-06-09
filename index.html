@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jarurat Care</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #F0F9FF;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #0EA5E9 0%, #10B981 100%);
+      padding: 28px 20px 24px;
+      text-align: center;
+    }
+    .header .icon { font-size: 36px; margin-bottom: 4px; }
+    .header h1 { color: #fff; font-size: 26px; font-weight: 800; letter-spacing: 0.5px; }
+    .header p  { color: #E0F2FE; font-size: 13px; margin-top: 6px; }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      background: #fff;
+      border-bottom: 2px solid #E5E7EB;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      flex: 1;
+      min-width: 110px;
+      padding: 14px 8px;
+      background: none;
+      border: none;
+      border-bottom: 2.5px solid transparent;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: #6B7280;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      color: #0EA5E9;
+      font-weight: 700;
+      border-bottom: 2.5px solid #0EA5E9;
+    }
+
+    /* Card */
+    .card-wrap { max-width: 520px; margin: 28px auto; padding: 0 16px 40px; }
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 26px 24px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    }
+    .card h2 { font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 4px; }
+    .card-line {
+      height: 3px; width: 40px;
+      background: linear-gradient(90deg, #0EA5E9, #10B981);
+      border-radius: 2px; margin-bottom: 18px;
+    }
+    .card p.subtitle { color: #6B7280; font-size: 14px; margin-bottom: 20px; }
+
+    /* Form elements */
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 5px; }
+    .field label span { color: #EF4444; }
+    .field input, .field select, .field textarea {
+      width: 100%; padding: 10px 13px;
+      border: 1.5px solid #D1D5DB;
+      border-radius: 8px; font-size: 14px;
+      color: #111827; background: #F9FAFB;
+      outline: none; font-family: inherit;
+      transition: border 0.2s;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: #0EA5E9;
+    }
+    .field textarea { resize: vertical; }
+
+    /* Buttons */
+    .btn-primary {
+      width: 100%; padding: 12px;
+      background: linear-gradient(135deg, #0EA5E9, #10B981);
+      color: #fff; border: none; border-radius: 9px;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      letter-spacing: 0.3px; transition: opacity 0.2s;
+    }
+    .btn-primary:disabled { background: #7DD3FC; cursor: not-allowed; }
+    .btn-primary:hover:not(:disabled) { opacity: 0.9; }
+
+    .btn-submit-triage {
+      margin-top: 14px; padding: 9px 18px;
+      color: #fff; border: none; border-radius: 7px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+
+    /* Triage result */
+    .triage-box {
+      margin-top: 20px; padding: 16px 18px;
+      border-radius: 10px; border-width: 1.5px; border-style: solid;
+      animation: fadeIn 0.35s ease forwards;
+    }
+    .triage-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .triage-header .t-emoji { font-size: 22px; }
+    .triage-header .t-label { font-weight: 700; font-size: 16px; }
+    .triage-next { margin: 0; font-size: 14px; line-height: 1.55; }
+
+    /* Success card */
+    .success-card {
+      margin-top: 20px; padding: 18px 20px;
+      background: #F0FDF4; border: 1.5px solid #86EFAC;
+      border-radius: 10px; text-align: center;
+      animation: fadeIn 0.35s ease forwards;
+    }
+    .success-card .s-icon { font-size: 28px; }
+    .success-card p { margin: 8px 0 0; color: #166534; font-weight: 600; font-size: 15px; }
+
+    /* Error */
+    .error-msg { color: #EF4444; font-size: 13px; margin-bottom: 12px; }
+
+    /* Tab panels */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* Footer */
+    footer { text-align: center; padding: 0 0 24px; color: #9CA3AF; font-size: 12px; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="icon">🏥</div>
+    <h1>Jarurat Care</h1>
+    <p>Healthcare support for everyone — anytime, anywhere.</p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(0)">🩺 Patient Support</button>
+    <button class="tab-btn"        onclick="switchTab(1)">🤝 Volunteer Registration</button>
+    <button class="tab-btn"        onclick="switchTab(2)">✉️ Contact Us</button>
+  </div>
+
+  <!-- Card -->
+  <div class="card-wrap">
+    <div class="card">
+
+      <!-- Tab 0: Patient Support -->
+      <div class="tab-panel active" id="panel-0">
+        <h2>🩺 Patient Support</h2>
+        <div class="card-line"></div>
+        <p class="subtitle">Fill in your details and describe your symptoms. Our AI will assess urgency and suggest the next step.</p>
+
+        <div class="field">
+          <label>Full Name <span>*</span></label>
+          <input type="text" id="p-name" placeholder="Kanishak Jain" />
+        </div>
+        <div class="field">
+          <label>Age <span>*</span></label>
+          <input type="number" id="p-age" placeholder="19" />
+        </div>
+        <div class="field">
+          <label>Phone Number <span>*</span></label>
+          <input type="tel" id="p-phone" placeholder="+91 98765 43210" />
+        </div>
+        <div class="field">
+          <label>Preferred Language</label>
+          <select id="p-lang">
+            <option value="">Select…</option>
+            <option>English</option>
+            <option>Hindi</option>
+            <option>Bengali</option>
+            <option>Tamil</option>
+            <option>Telugu</option>
+            <option>Marathi</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Describe your symptoms <span>*</span></label>
+          <textarea id="p-symptoms" rows="5" placeholder="e.g. I have had a high fever (103°F) for 3 days with severe headache and body ache…"></textarea>
+        </div>
+
+        <p class="error-msg" id="p-error" style="display:none"></p>
+        <button class="btn-primary" id="triage-btn" onclick="runTriage()">🔍 Run AI Triage</button>
+
+        <div id="triage-result" style="display:none"></div>
+        <div id="p-success" style="display:none" class="success-card">
+          <div class="s-icon">✅</div>
+          <p>Your request has been submitted. Our team will contact you shortly.</p>
+        </div>
+      </div>
+
+      <!-- Tab 1: Volunteer Registration -->
+      <div class="tab-panel" id="panel-1">
+        <h2>🤝 Volunteer Registration</h2>
+        <div class="card-line"></div>
+        <p class="subtitle">Join the Jarurat Care volunteer network. Every skill counts — medical or non-medical.</p>
+
+        <div class="field"><label>Full Name <span>*</span></label><input type="text" id="v-name" placeholder="Kanishak Jain" /></div>
+        <div class="field"><label>Phone Number <span>*</span></label><input type="tel" id="v-phone" placeholder="+91 98765 43210" /></div>
+        <div class="field"><label>Email Address <span>*</span></label><input type="email" id="v-email" placeholder="kanishakgit@gmail.com" /></div>
+        <div class="field"><label>City / Area <span>*</span></label><input type="text" id="v-city" placeholder="Jaipur, Rajasthan" /></div>
+        <div class="field">
+          <label>Availability <span>*</span></label>
+          <select id="v-avail">
+            <option value="">Select…</option>
+            <option>Weekdays</option>
+            <option>Weekends</option>
+            <option>Both</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Primary Skill <span>*</span></label>
+          <select id="v-skill">
+            <option value="">Select…</option>
+            <option>Doctor</option>
+            <option>Nurse / Paramedic</option>
+            <option>Driver / Transport</option>
+            <option>Admin / Coordinator</option>
+            <option>Counsellor</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <button class="btn-primary" onclick="submitVolunteer()">Register as Volunteer</button>
+        <div id="v-success" style="display:none" class="success-card">
+          <div class="s-icon">✅</div>
+          <p>Thank you for volunteering! We'll reach out within 48 hours.</p>
+        </div>
+      </div>
+
+      <!-- Tab 2: Contact Us -->
+      <div class="tab-panel" id="panel-2">
+        <h2>✉️ Contact Us</h2>
+        <div class="card-line"></div>
+        <p class="subtitle">Have a question or partnership inquiry? We'd love to hear from you.</p>
+
+        <div class="field"><label>Your Name <span>*</span></label><input type="text" id="c-name" placeholder="Kanishak Jain" /></div>
+        <div class="field"><label>Email Address <span>*</span></label><input type="email" id="c-email" placeholder="kanishakgit@gmail.com" /></div>
+        <div class="field"><label>Message <span>*</span></label><textarea id="c-message" rows="5" placeholder="I'd like to know more about…"></textarea></div>
+        <button class="btn-primary" onclick="submitContact()">Send Message</button>
+        <div id="c-success" style="display:none" class="success-card">
+          <div class="s-icon">✅</div>
+          <p>Message received! We'll get back to you within 24 hours.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>© 2026 Jarurat Care · Built for community health</footer>
+
+  <script>
+    // ── CONFIG ──────────────────────────────────────────────────────
+    const GEMINI_API_KEY = "AQ.Ab8RN6J524JvAT4LV6LMLyles-3eqGPwZIwWJE46ZEEJd8OUIw";
+    const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+    const PRIORITY = {
+      CRITICAL: { bg:"#FEE2E2", border:"#EF4444", text:"#991B1B", emoji:"🔴", label:"Critical" },
+      MODERATE: { bg:"#FEF9C3", border:"#EAB308", text:"#854D0E", emoji:"🟡", label:"Moderate" },
+      LOW:      { bg:"#DCFCE7", border:"#22C55E", text:"#166534", emoji:"🟢", label:"Low" },
+    };
+
+    // ── TABS ────────────────────────────────────────────────────────
+    function switchTab(index) {
+      document.querySelectorAll('.tab-btn').forEach((b, i) =>
+        b.classList.toggle('active', i === index));
+      document.querySelectorAll('.tab-panel').forEach((p, i) =>
+        p.classList.toggle('active', i === index));
+    }
+
+    // ── PATIENT TRIAGE ──────────────────────────────────────────────
+    async function runTriage() {
+      const name     = document.getElementById('p-name').value.trim();
+      const age      = document.getElementById('p-age').value.trim();
+      const phone    = document.getElementById('p-phone').value.trim();
+      const lang     = document.getElementById('p-lang').value;
+      const symptoms = document.getElementById('p-symptoms').value.trim();
+      const errEl    = document.getElementById('p-error');
+      const btn      = document.getElementById('triage-btn');
+      const resultEl = document.getElementById('triage-result');
+
+      if (!name || !age || !phone || !symptoms) {
+        errEl.textContent = "Please fill all required fields.";
+        errEl.style.display = "block"; return;
+      }
+      errEl.style.display = "none";
+      resultEl.style.display = "none";
+      btn.disabled = true; btn.textContent = "Analysing…";
+
+      const prompt = `You are a medical triage assistant for an NGO helpline called Jarurat Care in India.
+A patient has submitted the following details:
+- Name: ${name}
+- Age: ${age}
+- Preferred Language: ${lang || "Not specified"}
+- Symptom Description: "${symptoms}"
+
+Classify the urgency as exactly one of: CRITICAL, MODERATE, or LOW.
+Then provide a short (1–2 sentence) recommended next step for this patient.
+
+Respond ONLY in this exact JSON format (no markdown, no extra text):
+{"priority":"CRITICAL","next_step":"..."}`;
+
+      try {
+        const res = await fetch(GEMINI_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+        });
+        const data = await res.json();
+        const raw  = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        const clean = raw.replace(/```json|```/g, "").trim();
+        const parsed = JSON.parse(clean);
+        const s = PRIORITY[parsed.priority] || PRIORITY.LOW;
+
+        resultEl.innerHTML = `
+          <div class="triage-box" style="background:${s.bg};border-color:${s.border}">
+            <div class="triage-header">
+              <span class="t-emoji">${s.emoji}</span>
+              <span class="t-label" style="color:${s.text}">Priority: ${s.label}</span>
+            </div>
+            <p class="triage-next" style="color:${s.text}">
+              <strong>Recommended next step:</strong> ${parsed.next_step}
+            </p>
+            <button class="btn-submit-triage" style="background:${s.border};margin-top:14px"
+              onclick="submitPatient()">Submit Request →</button>
+          </div>`;
+        resultEl.style.display = "block";
+      } catch(e) {
+        errEl.textContent = "Triage failed. Please check your API key or try again.";
+        errEl.style.display = "block";
+      }
+
+      btn.disabled = false; btn.textContent = "🔍 Run AI Triage";
+    }
+
+    function submitPatient() {
+      document.getElementById('triage-result').style.display = "none";
+      document.getElementById('triage-btn').style.display = "none";
+      document.getElementById('p-success').style.display = "block";
+    }
+
+    // ── VOLUNTEER ───────────────────────────────────────────────────
+    function submitVolunteer() {
+      const fields = ['v-name','v-phone','v-email','v-city','v-avail','v-skill'];
+      const empty  = fields.some(id => !document.getElementById(id).value.trim());
+      if (empty) { alert("Please fill all required fields."); return; }
+      document.getElementById('v-success').style.display = "block";
+      document.querySelector('#panel-1 .btn-primary').style.display = "none";
+    }
+
+    // ── CONTACT ─────────────────────────────────────────────────────
+    function submitContact() {
+      const fields = ['c-name','c-email','c-message'];
+      const empty  = fields.some(id => !document.getElementById(id).value.trim());
+      if (empty) { alert("Please fill all required fields."); return; }
+      document.getElementById('c-success').style.display = "block";
+      document.querySelector('#panel-2 .btn-primary').style.display = "none";
+    }
+  </script>
+
+</body>
+          </html>
